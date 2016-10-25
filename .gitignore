@@ -1,0 +1,15 @@
+.env
+*.pyc
+*.swp
+*.iml
+*.egg-info
+*.egg
+*.patch
+.#*
+dist
+build
+tests/.cache/*
+.cache
+venv
+.DS_Store
+.coverage
