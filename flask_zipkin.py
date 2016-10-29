@@ -30,17 +30,32 @@ class Zipkin(object):
         if app is not None:
             self.init_app(app)
         self._transport_handler = None
+        self._transport_exception_handler = None
+
+    def default_exception_handler(self, ex):
+        pass
 
     def default_handler(self, encoded_span):
-        body = str.encode('\x0c\x00\x00\x00\x01') + encoded_span
-        return requests.post(
-            self.app.config.get('ZIPKIN_DSN'),
-            data=body,
-            headers={'Content-Type': 'application/x-thrift'},
-        )
+        try:
+            body = str.encode('\x0c\x00\x00\x00\x01') + encoded_span
+            return requests.post(
+                self.app.config.get('ZIPKIN_DSN'),
+                data=body,
+                headers={'Content-Type': 'application/x-thrift'},
+                timeout=1,
+            )
+        except Exception as e:
+            if self._transport_exception_handler:
+                self._transport_exception_handler(e)
+            else:
+                self.default_exception_handler(e)
 
     def transport_handler(self, callback):
         self._transport_handler = callback
+        return callback
+
+    def transport_exception_handler(self, callback):
+        self._transport_exception_handler = callback
         return callback
 
     def init_app(self, app):
