@@ -47,6 +47,15 @@ def default_handler(self, encoded_span):
 )
 ```
 
+
+`flask_zipkin` eats all transport exception by default. You could define an exception handler, like:
+
+```python
+@zipkin.transport_exception_handler
+def default_ex_handler(self, ex):
+    raise ex
+```
+
 and also, you could exempt some views, like:
 
 ```python
