@@ -9,7 +9,7 @@ import requests
 from py_zipkin import zipkin
 
 
-__version_info__ = ('0', '0', '1')
+__version_info__ = ('0', '0', '2')
 __version__ = '.'.join(__version_info__)
 __author__ = 'killpanda'
 __license__ = 'BSD'
@@ -62,7 +62,7 @@ class Zipkin(object):
         self.app = app
         app.before_request(self._before_request)
         app.after_request(self._after_request)
-        self._zipkin_disable = app.config.get(
+        self._disable = app.config.get(
             'ZIPKIN_DISABLE', app.config.get('TESTING', False))
         return self
 
@@ -70,7 +70,7 @@ class Zipkin(object):
         return (view_func not in self._exempt_views)
 
     def _before_request(self):
-        if self._zipkin_disable:
+        if self._disable:
             return
 
         _app_ctx_stack.top._view_func = \
@@ -108,7 +108,7 @@ class Zipkin(object):
         return view
 
     def _after_request(self, response):
-        if self._zipkin_disable:
+        if self._disable:
             return response
         if not hasattr(g, '_zipkin_span'):
             return response
@@ -116,4 +116,6 @@ class Zipkin(object):
         return response
 
     def create_http_headers_for_new_span(self):
+        if self._disable:
+            return dict()
         return zipkin.create_http_headers_for_new_span()
