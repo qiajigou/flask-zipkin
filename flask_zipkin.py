@@ -81,13 +81,15 @@ class Zipkin(object):
         headers = request.headers
         trace_id = headers.get('X-B3-TraceId') or self._gen_random_id()
         parent_span_id = headers.get('X-B3-Parentspanid')
+        is_sampled = str(headers.get('X-B3-Sampled') or '0') == '1'
+        flags = headers.get('X-B3-Flags')
 
         zipkin_attrs = zipkin.ZipkinAttrs(
             trace_id=trace_id,
             span_id=self._gen_random_id(),
             parent_span_id=parent_span_id,
-            flags='1',
-            is_sampled=True,
+            flags=flags,
+            is_sampled=is_sampled,
         )
 
         handler = self._transport_handler or self.default_handler
