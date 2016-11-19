@@ -65,6 +65,16 @@ def hello():
     return 'hello world'
 ```
 
+add key, value for your tracing record, like:
+
+```python
+
+zipkin.logging(id=1, user_id=2)
+
+```
+
+
+
 ## app configs
 
 `ZIPKIN_DISABLE`  disable zipkin tracking if value is `True`
