@@ -123,6 +123,6 @@ class Zipkin(object):
         return zipkin.create_http_headers_for_new_span()
 
     def logging(self, **kwargs):
-        if g._zipkin_span and g._zipkin_span.logging_context:
+        if hasattr(g, '_zipkin_span') and g._zipkin_span and g._zipkin_span.logging_context:
             g._zipkin_span.logging_context.binary_annotations_dict.update(
                 kwargs)
