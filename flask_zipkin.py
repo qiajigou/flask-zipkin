@@ -1,3 +1,4 @@
+import logging
 import random
 import string
 from flask import g
@@ -80,7 +81,7 @@ class Zipkin(object):
             return
         headers = request.headers
         trace_id = headers.get('X-B3-TraceId') or self._gen_random_id()
-        parent_span_id = headers.get('X-B3-Parentspanid')
+        parent_span_id = headers.get('X-B3-ParentSpanId')
         is_sampled = str(headers.get('X-B3-Sampled') or '0') == '1'
         flags = headers.get('X-B3-Flags')
 
@@ -123,6 +124,13 @@ class Zipkin(object):
         return zipkin.create_http_headers_for_new_span()
 
     def logging(self, **kwargs):
-        if hasattr(g, '_zipkin_span') and g._zipkin_span and g._zipkin_span.logging_context:
+        logging.warning('This method has been depreated, '
+                        'please call `update_tags` instead.')
+        self.update_tags(**kwargs)
+
+    def update_tags(self, **kwargs):
+        if all([hasattr(g, '_zipkin_span'),
+                g._zipkin_span,
+                g._zipkin_span.logging_context]):
             g._zipkin_span.logging_context.binary_annotations_dict.update(
                 kwargs)

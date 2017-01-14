@@ -19,6 +19,7 @@ setup(
     py_modules=['flask_zipkin'],
     zip_safe=False,
     platforms='any',
+    test_suite='test_flask_zipkin',
     install_requires=[
         'Flask',
         'py_zipkin>=0.4.0',
