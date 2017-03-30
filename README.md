@@ -69,7 +69,7 @@ add key, value for your tracing record, like:
 
 ```python
 
-zipkin.logging(id=1, user_id=2)
+zipkin.update_tags(id=1, user_id=2)
 
 ```
 
