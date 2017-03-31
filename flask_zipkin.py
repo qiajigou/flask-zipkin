@@ -145,6 +145,11 @@ def child_span(f):
         )
         kwargs['span'] = span
         with span:
-            return f(*args, **kwargs)
+            val = f(*args, **kwargs)
+            span.update_binary_annotations({
+                'function_args': args,
+                'function_returns': val,
+            })
+            return val
 
     return decorated
