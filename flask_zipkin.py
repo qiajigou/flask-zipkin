@@ -84,6 +84,9 @@ class Zipkin(object):
         is_sampled = str(headers.get('X-B3-Sampled') or '0') == '1'
         flags = headers.get('X-B3-Flags')
 
+        sample_rate = None if headers.get(
+            'X-B3-Sampled') else self._sample_rate
+
         zipkin_attrs = zipkin.ZipkinAttrs(
             trace_id=trace_id,
             span_id=self._gen_random_id(),
@@ -98,7 +101,7 @@ class Zipkin(object):
             service_name=self.app.name,
             span_name=request.endpoint,
             transport_handler=handler,
-            sample_rate=self._sample_rate,
+            sample_rate=sample_rate,
             zipkin_attrs=zipkin_attrs
         )
         g._zipkin_span = span
