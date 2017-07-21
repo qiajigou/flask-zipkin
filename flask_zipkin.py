@@ -1,12 +1,13 @@
 import logging
 import random
 import string
-from flask import g
-from flask import request
+
+import flask
+import requests
 from flask import _app_ctx_stack
 from flask import current_app
-
-import requests
+from flask import g
+from flask import request
 from py_zipkin import zipkin
 
 
@@ -134,3 +135,21 @@ class Zipkin(object):
                 g._zipkin_span.logging_context]):
             g._zipkin_span.logging_context.binary_annotations_dict.update(
                 kwargs)
+
+
+def child_span(f):
+    def decorated(*args, **kwargs):
+        span = zipkin.zipkin_span(
+            service_name=flask.current_app.name,
+            span_name=f.__name__,
+        )
+        kwargs['span'] = span
+        with span:
+            val = f(*args, **kwargs)
+            span.update_binary_annotations({
+                'function_args': args,
+                'function_returns': val,
+            })
+            return val
+
+    return decorated
