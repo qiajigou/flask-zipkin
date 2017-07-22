@@ -1,6 +1,6 @@
 # flask-zipkin
 
-a flask zipkin extesion based on py_zipkin.
+a flask zipkin extension based on py_zipkin.
 
 ## Installation
 
@@ -23,7 +23,7 @@ zipkin.init_app(app)
 
 you could gen a header to pass it to other services, the downstream service will recieve this header.
 
-```
+```python
 @bp.route('/')
 def hello():
     headers = {}
