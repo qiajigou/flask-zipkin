@@ -96,7 +96,7 @@ class Zipkin(object):
 
         span = zipkin.zipkin_span(
             service_name=self.app.name,
-            span_name=request.endpoint,
+            span_name='{0}.{1}'.format(request.endpoint, request.mehod),
             transport_handler=handler,
             sample_rate=self._sample_rate,
             zipkin_attrs=zipkin_attrs
