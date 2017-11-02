@@ -26,25 +26,26 @@ class Zipkin(object):
             random.choice(
                 string.digits) for i in range(16))
 
-    def __init__(self, app=None, sample_rate=100):
+    def __init__(self, app=None, sample_rate=100, timeout=2):
         self._exempt_views = set()
         self._sample_rate = sample_rate
         if app is not None:
             self.init_app(app)
         self._transport_handler = None
         self._transport_exception_handler = None
+        self._timeout = timeout
 
     def default_exception_handler(self, ex):
         pass
 
     def default_handler(self, encoded_span):
         try:
-            body = str.encode('\x0c\x00\x00\x00\x01') + encoded_span
+            #body = str.encode('\x0c\x00\x00\x00\x01') + encoded_span
             return requests.post(
                 self.app.config.get('ZIPKIN_DSN'),
-                data=body,
+                data=encoded_span,
                 headers={'Content-Type': 'application/x-thrift'},
-                timeout=1,
+                timeout=self._timeout,
             )
         except Exception as e:
             if self._transport_exception_handler:
