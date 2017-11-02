@@ -26,7 +26,7 @@ class Zipkin(object):
             random.choice(
                 string.digits) for i in range(16))
 
-    def __init__(self, app=None, sample_rate=100, timeout=2):
+    def __init__(self, app=None, sample_rate=100, timeout=1):
         self._exempt_views = set()
         self._sample_rate = sample_rate
         if app is not None:
