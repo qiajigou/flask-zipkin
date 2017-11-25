@@ -39,10 +39,10 @@ def hello():
 ```python
 @zipkin.transport_handler
 def default_handler(self, encoded_span):
-    body = str.encode('\x0c\x00\x00\x00\x01') + encoded_span
+    #body = str.encode('\x0c\x00\x00\x00\x01') + encoded_span
     return requests.post(
 		'your transport dsn',
-        data=body,
+        data=encoded_span,
         headers={'Content-Type': 'application/x-thrift'},
 )
 ```
