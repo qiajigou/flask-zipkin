@@ -118,7 +118,11 @@ class Zipkin(object):
             return response
         if not hasattr(g, '_zipkin_span'):
             return response
-        g._zipkin_span.stop()
+        try:
+          g._zipkin_span.stop()
+        except Exception as e:
+          logging.warning('Unable to stop zipkin span:{}'.format(e))
+
         return response
 
     def create_http_headers_for_new_span(self):
