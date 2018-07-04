@@ -131,9 +131,9 @@ class Zipkin(object):
         self.update_tags(**kwargs)
 
     def update_tags(self, **kwargs):
-        if all([hasattr(g, '_zipkin_span'),
-                g._zipkin_span,
-                g._zipkin_span.logging_context]):
+        if hasattr(g, '_zipkin_span') \
+                and all([g._zipkin_span,
+                         g._zipkin_span.logging_context]):
             g._zipkin_span.logging_context.binary_annotations_dict.update(
                 kwargs)
 
