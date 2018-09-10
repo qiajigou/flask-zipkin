@@ -72,6 +72,12 @@ class Zipkin(object):
     def _should_use_token(self, view_func):
         return (view_func not in self._exempt_views)
 
+    def _safe_headers(self, headers):
+        if hasattr(self, "_headers"):
+            return self._headers
+        self._headers = dict((k.lower(), v) for k, v in headers.__iter__())
+        return self._headers
+
     def _before_request(self):
         if self._disable:
             return
@@ -81,12 +87,14 @@ class Zipkin(object):
 
         if not self._should_use_token(_app_ctx_stack.top._view_func):
             return
-        headers = request.headers
-        parent_span_id = headers.get('X-B3-Parentspanid')
-        trace_id = headers.get('X-B3-TraceId') or self._gen_random_id()
-        is_sampled = str(headers.get('X-B3-Sampled') or '0') == '1'
 
-        flags = headers.get('X-B3-Flags')
+        safe_headers = self._safe_headers(request.headers)
+
+        parent_span_id = safe_headers.get('x-b3-parentspanid')
+        trace_id = safe_headers.get('x-b3-traceid') or self._gen_random_id()
+        is_sampled = str(safe_headers.get('x-b3-sampled') or '0') == '1'
+
+        flags = safe_headers.get('x-b3-flags')
 
         zipkin_attrs = zipkin.ZipkinAttrs(
             trace_id=trace_id,
