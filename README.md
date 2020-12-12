@@ -51,7 +51,7 @@ def default_handler(encoded_span):
 
 ```python
 @zipkin.transport_exception_handler
-def default_ex_handler(self, ex):
+def default_ex_handler(ex):
     raise ex
 ```
 
