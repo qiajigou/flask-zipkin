@@ -11,11 +11,11 @@ from flask import request
 from py_zipkin import zipkin
 
 
-__version_info__ = ('0', '0', '4')
+__version_info__ = ('0', '0', '5')
 __version__ = '.'.join(__version_info__)
 __author__ = 'killpanda'
 __license__ = 'BSD'
-__copyright__ = '(c) 2016 by killpanda'
+__copyright__ = '(c) 2020 by killpanda'
 __all__ = ['Zipkin']
 
 
