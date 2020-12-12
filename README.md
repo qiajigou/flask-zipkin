@@ -38,8 +38,7 @@ def hello():
 
 ```python
 @zipkin.transport_handler
-def default_handler(self, encoded_span):
-    #body = str.encode('\x0c\x00\x00\x00\x01') + encoded_span
+def default_handler(encoded_span):
     return requests.post(
 		'your transport dsn',
         data=encoded_span,
