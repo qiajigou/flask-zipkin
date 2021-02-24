@@ -73,8 +73,6 @@ class Zipkin(object):
         return (view_func not in self._exempt_views)
 
     def _safe_headers(self, headers):
-        if hasattr(self, "_headers"):
-            return self._headers
         self._headers = dict((k.lower(), v) for k, v in headers.__iter__())
         return self._headers
 
