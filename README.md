@@ -21,7 +21,7 @@ app.config['ZIPKIN_DSN'] = "http://127.0.0.1:9411/api/v1/spans"
 
 ## Advance Usage
 
-you could gen a header to pass it to other services, the downstream service will recieve this header.
+you could gen a header to pass it to other services, the downstream service will receive this header.
 
 ```python
 @bp.route('/')
